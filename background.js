@@ -1,5 +1,4 @@
 var clearMatch = new RegExp("clear [0 - 9] + [m | h | d | M | y]")
-
 function resetDefaultSuggestion() {
     chrome.omnibox.setDefaultSuggestion({
         description: 'Search in chrome history for <match> %s </match>'
@@ -71,6 +70,12 @@ chrome.omnibox.onInputEntered.addListener(function (text) {
         chrome.history.deleteRange({ startTime: startTime, endTime: endTime }, () => { console.log("history deleted") })
     }
     else {
-        navigate(text)
+        if(text.startsWith("http") || text.startsWith("https")){
+            navigate(text)
+        }
+        else
+        {
+            navigate("https://www.google.com/search?q="+escapeXML(text))
+        }
     }
 });
